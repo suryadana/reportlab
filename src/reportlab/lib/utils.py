@@ -5,7 +5,7 @@ __version__=''' $Id$ '''
 __doc__='''Gazillions of miscellaneous internal utility functions'''
 
 import os, sys, imp, time, types
-from base64 import decodestring as base64_decodestring, encodestring as base64_encodestring
+from base64 import decodebytes as base64_decodestring, encodebytes as base64_encodestring
 from reportlab import isPy3
 from reportlab.lib.logger import warnOnce
 from reportlab.lib.rltempfile import get_rl_tempfile, get_rl_tempdir, _rl_getuid
@@ -104,7 +104,7 @@ if isPy3:
         if buf:
             return BytesIO(buf)
         return BytesIO()
-    _bytesIOType = BytesIO 
+    _bytesIOType = BytesIO
 
     def getStringIO(buf=None):
         '''unified StringIO instance interface'''
@@ -206,7 +206,7 @@ else:
             return StringIO(buf)
         return StringIO()
     getStringIO = getBytesIO
-    _bytesIOType = StringIO 
+    _bytesIOType = StringIO
 
     def bytestr(x,enc='utf8'):
         if isinstance(x,unicode):
@@ -907,14 +907,14 @@ class ImageReader(object):
             else:
                 return None
 
-class LazyImageReader(ImageReader): 
-    def fp(self): 
-        return open_for_read(self.fileName, 'b') 
-    fp=property(fp) 
+class LazyImageReader(ImageReader):
+    def fp(self):
+        return open_for_read(self.fileName, 'b')
+    fp=property(fp)
 
     def _image(self):
         return self._read_image(self.fp)
-    _image=property(_image) 
+    _image=property(_image)
 
 def getImageData(imageFileName):
     "Get width, height and RGB pixels from image file.  Wraps Java/PIL"
@@ -927,21 +927,21 @@ class DebugMemo:
     '''Intended as a simple report back encapsulator
 
     Typical usages:
-        
+
     1. To record error data::
-        
+
         dbg = DebugMemo(fn='dbgmemo.dbg',myVar=value)
         dbg.add(anotherPayload='aaaa',andagain='bbb')
         dbg.dump()
 
     2. To show the recorded info::
-        
+
         dbg = DebugMemo(fn='dbgmemo.dbg',mode='r')
         dbg.load()
         dbg.show()
 
     3. To re-use recorded information::
-        
+
         dbg = DebugMemo(fn='dbgmemo.dbg',mode='r')
             dbg.load()
         myTestFunc(dbg.payload('myVar'),dbg.payload('andagain'))
@@ -952,7 +952,7 @@ class DebugMemo:
     def __init__(self,fn='rl_dbgmemo.dbg',mode='w',getScript=1,modules=(),capture_traceback=1, stdout=None, **kw):
         import time, socket
         self.fn = fn
-        if not stdout: 
+        if not stdout:
             self.stdout = sys.stdout
         else:
             if hasattr(stdout,'write'):
@@ -1275,19 +1275,19 @@ import itertools
 def prev_this_next(items):
     """
     Loop over a collection with look-ahead and look-back.
-    
-    From Thomas Guest, 
+
+    From Thomas Guest,
     http://wordaligned.org/articles/zippy-triples-served-with-python
-    
+
     Seriously useful looping tool (Google "zippy triples")
     lets you loop a collection and see the previous and next items,
     which get set to None at the ends.
-    
+
     To be used in layout algorithms where one wants a peek at the
     next item coming down the pipe.
 
     """
-    
+
     extend = itertools.chain([None], items, [None])
     prev, this, next = itertools.tee(extend, 3)
     try:
@@ -1304,7 +1304,7 @@ def commasplit(s):
     To escape a comma, double it. Individual items are stripped.
     To avoid the ambiguity of 3 successive commas to denote a comma at the beginning
     or end of an item, add a space between the item seperator and the escaped comma.
-    
+
     >>> commasplit(u'a,b,c') == [u'a', u'b', u'c']
     True
     >>> commasplit('a,, , b , c    ') == [u'a,', u'b', u'c']
@@ -1329,17 +1329,17 @@ def commasplit(s):
         i+=1
     r[-1] = r[-1].strip()
     return r
-    
+
 def commajoin(l):
     '''
     Inverse of commasplit, except that whitespace around items is not conserved.
     Adds more whitespace than needed for simplicity and performance.
-    
+
     >>> commasplit(commajoin(['a', 'b', 'c'])) == [u'a', u'b', u'c']
     True
     >>> commasplit((commajoin([u'a,', u' b ', u'c'])) == [u'a,', u'b', u'c']
     True
-    >>> commasplit((commajoin([u'a ', u',b', u'c'])) == [u'a', u',b', u'c'] 
+    >>> commasplit((commajoin([u'a ', u',b', u'c'])) == [u'a', u',b', u'c']
     '''
     return u','.join([ u' ' + asUnicode(i).replace(u',', u',,') + u' ' for i in l ])
 
@@ -1412,7 +1412,7 @@ def escapeOnce(data):
     data = data.replace("&amp;gt;", "&gt;")
     data = data.replace("&amp;lt;", "&lt;")
     return data
-    
+
 class IdentStr(str):
     '''useful for identifying things that get split'''
     def __new__(cls,value):
